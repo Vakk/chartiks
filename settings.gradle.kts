@@ -18,7 +18,12 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "chartiks"
 include(":app")
- 
+include(":chartiks-core")
+include(":compose-core")
+include(":compose-material")
+include(":examples")
+include(":line")

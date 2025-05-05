@@ -1,0 +1,3 @@
+[submodule "chartiks-core"]
+	path = chartiks-core
+	url = git@github.com:Vakk/chartiks-core.git
