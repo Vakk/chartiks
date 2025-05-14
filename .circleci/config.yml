@@ -5,24 +5,34 @@ version: 2.1
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  spin-up-environment:
+  build-libraries:
     executor: docker
     docker:
       - image: cimg/base:current
     steps:
-      - checkout
+      - build
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "Build all libraries"
+          command: "fastlane buildAll"
+    deploy-libraries:
+      executor: docker
+      docker:
+        - image: cimg/base:current
+      steps:
+        - run:
+            name: "Submit to Github Releases"
+            command: "fastlane buildAll"
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  deploy-libraries: # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
+  build-and-deploy-libraries:
     jobs:
-      - spin-up-environment
+      - build-libraries
+      - deploy-libraries:
+          requires:
+          - build-libraries
       - filters:
           tags:
             only:
-              /^milestone/v$/
+              /^master/

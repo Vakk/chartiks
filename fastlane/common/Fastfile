@@ -3,6 +3,15 @@ desc "Build the jar file for given module."
 lane :build do |options|
       build_config = options[:module]
       gradle(task: ":#{build_config}:assembleRelease")
+      dest = "../build"
+
+      sh("mkdir -p ../build")
+
+      if Dir.exists? "../#{build_config}/build/outputs/aar"
+          sh("mv ../#{build_config}/build/outputs/aar/* #{dest}")
+      else
+          sh("mv ../#{build_config}/build/libs/* #{dest}")
+      end
 end
 
 lane :buildAll do
@@ -10,4 +19,24 @@ lane :buildAll do
     build(module:"compose-core")
     build(module:"compose-material")
     build(module:"line")
+end
+
+lane :submitOutputToGithub do
+   output_folder = "../build"
+
+   # Get all files from the directory
+   files = Dir.entries(output_folder).select { |f| File.file?(File.join(output_folder, f)) }
+
+   # Print the list of files
+   UI.message("Files in #{output_folder}: #{files}")
+
+    set_github_release(
+      repository_name: "Vakk/chartiks",
+      api_token: ENV["GITHUB_TOKEN"],
+      name: "v0.0.1c",
+      tag_name: "milestone/v0.0.1c",
+      description: (File.read("changelog") rescue "No changelog provided"),
+      commitish: ENV["CIRCLE_BRANCH"],
+      upload_assets: files
+   )
 end

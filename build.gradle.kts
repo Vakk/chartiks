@@ -14,6 +14,15 @@ val versionProps = Properties().apply {
     load(File("${rootProject.projectDir}/version.properties").inputStream())
 }
 
+tasks.withType<Zip>().configureEach {
+    val moduleName = project.name
+    val versionName = versionProps["versionName"]
+    val versionCode = versionProps["versionCode"]
+
+    archiveBaseName.set("${moduleName}-${versionName}-${versionCode}")
+}
+
+
 subprojects {
     afterEvaluate {
         //Java Library JVM config.
@@ -45,6 +54,8 @@ subprojects {
             composeOptions {
                 kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
             }
+
+
         }
     }
 }
