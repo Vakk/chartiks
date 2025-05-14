@@ -1,16 +1,27 @@
 version: 2.1
 
 jobs:
-  spin-up-environment:
+  build-libraries:
     docker:
       - image: cimg/base:current
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "Build all libraries"
+          command: "fastlane buildAll"
+  deploy-libraries:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - run:
+          name: "Submit to Github Releases"
+          command: "fastlane buildAll"
 
 workflows:
-  deploy-libraries:
+  build-and-deploy-libraries:
     jobs:
-      - spin-up-environment
+      - build-libraries
+      - deploy-libraries:
+          requires:
+            - build-libraries
