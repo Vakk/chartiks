@@ -33,6 +33,6 @@ workflows:
           requires:
           - build-libraries
       - filters:
-          branches:
+          tags:
             only:
-              master
+              milestone/new
