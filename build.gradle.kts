@@ -1,6 +1,3 @@
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import java.util.Properties
 
@@ -30,7 +27,7 @@ subprojects {
         }
 
         extensions.findByType(com.android.build.gradle.BaseExtension::class)?.apply {
-            setCompileSdkVersion(35)
+            setCompileSdkVersion(versionProps["compileSdk"].toString().toInt())
 
             //Android Library JVM config.
             compileOptions {
@@ -39,14 +36,14 @@ subprojects {
             }
 
             defaultConfig {
-                minSdk = 21
+                minSdk = versionProps["minSdk"].toString().toInt()
 
                 versionName = versionProps["versionName"].toString()
                 versionCode = versionProps["versionCode"].toString().toInt()
             }
 
             composeOptions {
-                kotlinCompilerExtensionVersion = "1.5.1"
+                kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
             }
         }
     }
