@@ -6,12 +6,10 @@ plugins {
 
 android {
     namespace = "com.valeriik.chartiks"
-    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.valeriik.chartiks"
         minSdk = 23
-        targetSdk = 35
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,12 +23,8 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true

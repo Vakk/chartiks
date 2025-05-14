@@ -1,0 +1,13 @@
+desc "Build the jar file for given module."
+
+lane :build do |options|
+      build_config = options[:module]
+      gradle(task: ":#{build_config}:assembleRelease")
+end
+
+lane :buildAll do
+    build(module:"chartiks-core")
+    build(module:"compose-core")
+    build(module:"compose-material")
+    build(module:"line")
+end
