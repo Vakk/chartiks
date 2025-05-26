@@ -55,7 +55,6 @@ subprojects {
                 kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
             }
 
-
         }
     }
 }

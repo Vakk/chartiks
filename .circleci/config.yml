@@ -14,7 +14,8 @@ jobs:
       - run:
           name: "Build all libraries"
           command: "fastlane buildAll"
-    deploy-libraries:
+
+  deploy-libraries:
       executor: docker
       docker:
         - image: cimg/base:current
