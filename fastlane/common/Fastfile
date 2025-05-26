@@ -1,42 +1,33 @@
 desc "Build the jar file for given module."
 
 lane :build do |options|
-      build_config = options[:module]
-      gradle(task: ":#{build_config}:assembleRelease")
-      dest = "../build"
-
-      sh("mkdir -p ../build")
-
-      if Dir.exists? "../#{build_config}/build/outputs/aar"
-          sh("mv ../#{build_config}/build/outputs/aar/* #{dest}")
-      else
-          sh("mv ../#{build_config}/build/libs/* #{dest}")
-      end
+    module_name = options[:module]
+    gradle(task: ":#{module_name}:assembleRelease")
 end
 
-lane :buildAll do
-    build(module:"chartiks-core")
-    build(module:"compose-core")
-    build(module:"compose-material")
-    build(module:"line")
+lane :moveOutputToRoot do |options|
+    module_name = options[:module]
+
+    dest = "../build"
+    sh("mkdir -p ../build")
+
+    if Dir.exists? "../#{module_name}/build/outputs/aar"
+        sh("mv ../#{module_name}/build/outputs/aar/* #{dest}")
+    else
+        sh("mv ../#{module_name}/build/libs/* #{dest}")
+    end
 end
 
-lane :submitOutputToGithub do
-   output_folder = "../build"
+lane :publish do |options|
+    moduleName = options[:module]
+    gradle(task: ":#{moduleName}:publish")
+end
 
-   # Get all files from the directory
-   files = Dir.entries(output_folder).select { |f| File.file?(File.join(output_folder, f)) }
+lane :publishAllToGithubRegistry do
+    modules = ["compose-material"]
 
-   # Print the list of files
-   UI.message("Files in #{output_folder}: #{files}")
-
-    set_github_release(
-      repository_name: "Vakk/chartiks",
-      api_token: ENV["GITHUB_TOKEN"],
-      name: "v0.0.1c",
-      tag_name: "milestone/v0.0.1c",
-      description: (File.read("changelog") rescue "No changelog provided"),
-      commitish: ENV["CIRCLE_BRANCH"],
-      upload_assets: files
-   )
+    modules.each do |module_name|
+#         build(module: module_name)
+        publish(module: module_name)
+    end
 end

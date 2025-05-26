@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    `maven-publish`
 }
 
 android {
@@ -29,6 +30,24 @@ android {
     }
 }
 
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/vakk/chartiks")
+            credentials {
+                username = "username"
+                password = "password"
+            }
+        }
+    }
+    publications {
+        register<MavenPublication>("gpr") {
+            artifact("${projectDir}/build/outputs/aar/${artifactId}-release.aar")
+        }
+    }
+}
+
 dependencies {
     api(projects.chartiksCore)
     api(projects.composeCore)
@@ -42,7 +61,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.foundation.android)
-    implementation(project(":compose-core"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit)
