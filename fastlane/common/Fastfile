@@ -24,10 +24,10 @@ lane :publish do |options|
 end
 
 lane :publishAllToGithubRegistry do
-    modules = ["compose-material"]
+    modules = ["chartiks-core", "compose-core", "compose-material"]
 
     modules.each do |module_name|
-#         build(module: module_name)
+        build(module: module_name)
         publish(module: module_name)
     end
 end

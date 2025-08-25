@@ -42,9 +42,9 @@ androidx-foundation-android = { group = "androidx.compose.foundation", name = "f
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
-chartiks-core = { group = "com.valeriik", name = "chartiks-core", version.ref = "chartiksVersion" }
-chartiks-compose-core = { group = "com.valeriik", name = "compose-core", version.ref = "chartiksVersion" }
-chartiks-compose-material = { group = "com.valeriik", name = "compose-material", version.ref = "chartiksVersion" }
+chartiks-core = { group = "com.valeriik.chartiks", name = "chartiks-core", version.ref = "chartiksVersion" }
+chartiks-compose-core = { group = "com.valeriik.chartiks", name = "compose-core", version.ref = "chartiksVersion" }
+chartiks-compose-material = { group = "com.valeriik.chartiks", name = "compose-material", version.ref = "chartiksVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

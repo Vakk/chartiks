@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    `maven-publish`
 }
 
 android {
@@ -29,8 +30,22 @@ android {
     }
 }
 
+publishing {
+    publications {
+        register<MavenPublication>("gpr") {
+            groupId = project.group.toString()
+            artifactId = artifactId
+            version = project.version.toString()
+
+            artifact("${projectDir}/build/outputs/aar/${artifactId}-release.aar")
+        }
+    }
+}
+
 dependencies {
     api(projects.chartiksCore)
+
+//    implementation(libs.chartiks.core)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

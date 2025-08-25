@@ -16,7 +16,7 @@ val versionProps = Properties().apply {
 
 subprojects {
     project.version = versionProps["versionName"].toString()
-
+    project.group = "com.valeriik.chartiks"
     afterEvaluate {
         //Java Library JVM config.
         extensions.findByType(JavaPluginExtension::class)?.apply {
@@ -47,6 +47,21 @@ subprojects {
             composeOptions {
                 kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
             }
+        }
+    }
+
+    extensions.findByType(PublishingExtension::class)?.apply {
+        repositories {
+            mavenLocal()
+
+//            maven {
+//                name = "GitHubPackages"
+//                url = uri("https://maven.pkg.github.com/vakk")
+//                credentials {
+//                    username = System.getenv("GITHUB_USERNAME")
+//                    password = System.getenv("GITHUB_PASSWORD")
+//                }
+//            }
         }
     }
 }

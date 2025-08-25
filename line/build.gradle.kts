@@ -30,7 +30,10 @@ android {
 }
 
 dependencies {
-    api(projects.chartiksCore)
+//    api(projects.chartiksCore)
+
+    implementation(libs.chartiks.core)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 

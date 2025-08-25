@@ -31,26 +31,23 @@ android {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/vakk/chartiks")
-            credentials {
-                username = "username"
-                password = "password"
-            }
-        }
-    }
     publications {
         register<MavenPublication>("gpr") {
+            groupId = project.group.toString()
+            artifactId = artifactId
+            version = project.version.toString()
+
             artifact("${projectDir}/build/outputs/aar/${artifactId}-release.aar")
         }
     }
 }
 
 dependencies {
-    api(projects.chartiksCore)
-    api(projects.composeCore)
+//    api(projects.chartiksCore)
+//    api(projects.composeCore)
+
+    implementation(libs.chartiks.core)
+    implementation(libs.chartiks.compose.core)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
