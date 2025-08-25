@@ -54,6 +54,11 @@ fun MaterialPieChart(
     var selectedSection by remember { mutableStateOf<PieSegment?>(null) }
 
     var appearanceProgress by remember { mutableStateOf(0f) }
+
+    var borderThickness by remember { mutableStateOf(0f) }
+    var borderColor by remember { mutableStateOf(Color.White) }
+    var backgroundColor by remember { mutableStateOf(Color.White) }
+
     val animatedAppearanceProgress by animateFloatAsState(
         targetValue = appearanceProgress,
         animationSpec = spring(
@@ -93,6 +98,16 @@ fun MaterialPieChart(
         }
     }
 
+    LaunchedEffect(scope.borderThickness) {
+        borderThickness = scope.borderThickness
+    }
+    LaunchedEffect(scope.borderColor) {
+        borderColor = scope.borderColor
+    }
+    LaunchedEffect(scope.backgroundColor) {
+        backgroundColor = scope.backgroundColor
+    }
+
     val textMeasurer = rememberTextMeasurer()
 
     Box(modifier = modifier) {
@@ -110,13 +125,15 @@ fun MaterialPieChart(
             }) {
             drawChart(
                 textMeasurer = textMeasurer,
-                scope = scope,
                 output = output,
                 selectedSection = selectedSection,
                 appearanceProgress = animatedAppearanceProgress,
                 shiftValue = shiftOffset,
                 selectionShiftProgress = animatedSelectionShiftProgress,
-                colors = scope.categoryColors
+                colors = scope.categoryColors,
+                backgroundColor = backgroundColor,
+                borderThickness = borderThickness,
+                borderColor = borderColor
             )
         }
         selectedIndex.takeIf { it in output.segments.indices }?.let {
@@ -135,20 +152,22 @@ fun MaterialPieChart(
 
 private fun DrawScope.drawChart(
     textMeasurer: TextMeasurer,
-    scope: MaterialPieChartScope,
     output: PieChartOutput,
     selectedSection: PieSegment?,
     appearanceProgress: Float,
     shiftValue: Float,
     selectionShiftProgress: Float,
-    colors: Map<String, Color>
+    colors: Map<String, Color>,
+    backgroundColor: Color,
+    borderThickness: Float,
+    borderColor: Color
 ) {
     val radius = size.minDimension / 2f
     val selectionShiftOffset = shiftValue * selectionShiftProgress
 
     val circleBounds = Rect(center = center, radius = radius)
 
-    drawCircle(scope.backgroundColor)
+    drawCircle(backgroundColor)
 
     for (index in output.segments.indices) {
         val segment = output.segments[index]
@@ -173,13 +192,13 @@ private fun DrawScope.drawChart(
             },
             size = circleBounds.size,
         )
-        if (scope.borderThickness > 0f && scope.borderColor != Color.Transparent) {
+        if (borderThickness > 0f && borderColor != Color.Transparent) {
             drawArc(
-                color = scope.borderColor,
+                color = borderColor,
                 startAngle = segment.startAngle.times(appearanceProgress),
                 sweepAngle = segment.sweepAngle.times(appearanceProgress),
                 useCenter = true,
-                style = Stroke(width = scope.borderThickness),  // Adjust width for desired thickness
+                style = Stroke(width = borderThickness),  // Adjust width for desired thickness
                 topLeft = if (isSelected) {
                     circleBounds.topLeft + calculateOffset(
                         startAngle = segment.startAngle,
